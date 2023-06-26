@@ -13,6 +13,8 @@ const createForm = asyncHandler(async (req, res) => {
     mobile_number,
     state,
     city,
+    email,
+    pincode,
   });
 
   const savedForm = await form.save();
