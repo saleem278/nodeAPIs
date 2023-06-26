@@ -26,7 +26,7 @@ const createForm = asyncHandler(async (req, res) => {
 const getFormById = asyncHandler(async (req, res) => {
   const form = await Form.findById(req.params.id);
 
-  if (order) {
+  if (form) {
     res.json(form);
   } else {
     res.status(404);
