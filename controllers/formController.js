@@ -5,7 +5,8 @@ import Form from "../models/formModel.js";
 // @route   POST /api/orders
 // @access  Private
 const createForm = asyncHandler(async (req, res) => {
-  const { first_name, last_name, mobile_number, state, city } = req.body;
+  const { first_name, email, pincode, last_name, mobile_number, state, city } =
+    req.body;
 
   const form = new Form({
     first_name,
