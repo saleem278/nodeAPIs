@@ -7,7 +7,7 @@ const formSchema = mongoose.Schema({
   pincode: { type: Number, required: true },
   mobile_number: { type: Number, required: true },
   state: { type: String, required: true },
-  city: { type: String, required: true },
+  country: { type: String, required: true },
 });
 
 const Form = mongoose.model("Form", formSchema);
