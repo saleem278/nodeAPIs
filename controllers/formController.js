@@ -2,11 +2,18 @@ import asyncHandler from "express-async-handler";
 import Form from "../models/formModel.js";
 
 // @desc    Create new order
-// @route   POST /api/orders
-// @access  Private
+// @route   POST /api/form/create_form
+// @access  Public
 const createForm = asyncHandler(async (req, res) => {
-  const { first_name, email, pincode, last_name, mobile_number, state, country } =
-    req.body;
+  const {
+    first_name,
+    email,
+    pincode,
+    last_name,
+    mobile_number,
+    state,
+    country,
+  } = req.body;
 
   const form = new Form({
     first_name,
@@ -20,30 +27,85 @@ const createForm = asyncHandler(async (req, res) => {
 
   const savedForm = await form.save();
 
-  res.status(201).json(savedForm);
+  res.status(201).json({ status: true, data: savedForm });
 });
 
-// @desc    Get order by ID
-// @route   GET /api/orders/:id
-// @access  Private
+// @desc    Get Form by ID
+// @route   GET /api/form/:id
+// @access  Public
 const getFormById = asyncHandler(async (req, res) => {
   const form = await Form.findById(req.params.id);
 
   if (form) {
     res.json(form);
   } else {
-    res.status(404);
-    throw new Error("Form not found");
+    res.status(404).json({ status: false, message: "Form not found" });
   }
 });
 
-// @desc    Get logged in user orders
-// @route   GET /api/orders/myorders
-// @access  Private
-
+// @desc    Get all forms
+// @route   GET /api/form/all_forms
+// @access  Public
 const getAllForms = asyncHandler(async (req, res) => {
   const forms = await Form.find({});
-  res.json(forms);
+  res.json({ status: true, message: "Fetched All the forms", data: forms });
 });
 
-export { createForm, getFormById, getAllForms };
+const updateFormByID = asyncHandler(async (req, res) => {
+  const form = await Form.findByIdAndUpdate(req.body.id, req.body, {
+    new: true,
+  });
+  if (form) {
+    res.json({
+      status: true,
+      data: form,
+      message: "Form Updated Successfully",
+    });
+  } else {
+    res
+      .status(404)
+      .json({ status: false, message: "Can't Update this as Form not found" });
+  }
+});
+
+// @desc    Delete a Form by ID
+// @route   GET /api/form/:id
+// @access  Public
+const deleteAFormByID = asyncHandler(async (req, res) => {
+  const form = await Form.findByIdAndDelete(req.params.id);
+  if (form) {
+    res.json({
+      status: true,
+      data: form,
+      message: "Form Deleted Successfully",
+    });
+  } else {
+    res
+      .status(404)
+      .json({ status: false, message: "Can't Delete this as Form not found" });
+  }
+});
+
+// @desc    DELETE ALL FORMS
+// @route   GET /api/form/admin_delete_all_forms
+// @access  Public
+const deleteAllFormsByAdmin = asyncHandler(async (req, res) => {
+  await Form.deleteMany({}, (err) => {
+    if (err) {
+      console.error("Error emptying collection:", err);
+      res.json({ status: false, message: err.message });
+    } else {
+      console.log("Collection emptied successfully.");
+      res.json({ status: true, message: "All forms Deleted" });
+    }
+  });
+});
+
+export {
+  createForm,
+  getFormById,
+  getAllForms,
+  updateFormByID,
+  deleteAllFormsByAdmin,
+  deleteAFormByID,
+};
