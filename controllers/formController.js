@@ -15,6 +15,13 @@ const createForm = asyncHandler(async (req, res) => {
     country,
   } = req.body;
 
+  const alreadyExist = await Form.find(req.body);
+  if (alreadyExist.length > 0) {
+    return res
+      .status(409)
+      .json({ status: false, data: {}, message: "Form Already Exists" });
+  }
+
   const form = new Form({
     first_name,
     last_name,
@@ -37,7 +44,7 @@ const getFormById = asyncHandler(async (req, res) => {
   const form = await Form.findById(req.params.id);
 
   if (form) {
-    res.json(form);
+    res.status(200).json(form);
   } else {
     res.status(404).json({ status: false, message: "Form not found" });
   }
@@ -48,7 +55,9 @@ const getFormById = asyncHandler(async (req, res) => {
 // @access  Public
 const getAllForms = asyncHandler(async (req, res) => {
   const forms = await Form.find({});
-  res.json({ status: true, message: "Fetched All the forms", data: forms });
+  res
+    .status(200)
+    .json({ status: true, message: "Fetched All the forms", data: forms });
 });
 
 const updateFormByID = asyncHandler(async (req, res) => {
@@ -90,15 +99,24 @@ const deleteAFormByID = asyncHandler(async (req, res) => {
 // @route   GET /api/form/admin_delete_all_forms
 // @access  Public
 const deleteAllFormsByAdmin = asyncHandler(async (req, res) => {
-  await Form.deleteMany({}, (err) => {
-    if (err) {
-      console.error("Error emptying collection:", err);
-      res.json({ status: false, message: err.message });
+  if (req.query) {
+    let ticket = req.query.ticket;
+    if (ticket === "Techno") {
+      await Form.deleteMany({}, (err) => {
+        if (err) {
+          console.error("Error emptying collection:", err);
+          res.status(400).json({ status: false, message: err.message });
+        } else {
+          console.log("Collection emptied successfully.");
+          res.status(204).json({ status: true, message: "All forms Deleted" });
+        }
+      });
     } else {
-      console.log("Collection emptied successfully.");
-      res.json({ status: true, message: "All forms Deleted" });
+      return res.status(401).json({ status: false, message: "Unauthorized." });
     }
-  });
+  } else {
+    return res.status(401).json({ status: false, message: "Unauthorized." });
+  }
 });
 
 export {
