@@ -102,13 +102,13 @@ const deleteAllFormsByAdmin = asyncHandler(async (req, res) => {
   if (req.query) {
     let ticket = req.query.ticket;
     if (ticket === "Techno") {
-      await Form.deleteMany({}, (err) => {
+      Form.deleteMany({}, (err) => {
         if (err) {
           console.error("Error emptying collection:", err);
-          res.status(400).json({ status: false, message: err.message });
+          return res.status(400).json({ status: false, message: err.message });
         } else {
           console.log("Collection emptied successfully.");
-          res.status(204).json({ status: true, message: "All forms Deleted" });
+          return res.status(200).json({ status: true, message: "All forms Deleted" });
         }
       });
     } else {

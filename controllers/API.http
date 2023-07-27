@@ -13,23 +13,23 @@
 
 
 //delete all the forms
-# GET http://localhost:8000/api/form/admin_delete_all_forms?ticket=Techno HTTP/1.1
+GET http://localhost:8000/api/form/admin_delete_all_forms?ticket=Techno HTTP/1.1
 
 //create a form
 # POST https://node-ap-is.vercel.app/api/form/create_form
-POST http://localhost:8000/api/form/create_form HTTP/1.1
-content-type: application/json
+# POST http://localhost:8000/api/form/create_form HTTP/1.1
+# content-type: application/json
 
-{
-    "first_name": "sample1",
-    "last_name": "sample last1",
-    "mobile_number":9999999999,
-    "state":"Rajasthan",
-    "country":"India",
-    "email":"mo.saleem.ts@gmail.com",
-    "pincode":302020
+# {
+#     "first_name": "sample1",
+#     "last_name": "sample last1",
+#     "mobile_number":9999999999,
+#     "state":"Rajasthan",
+#     "country":"India",
+#     "email":"mo.saleem.ts@gmail.com",
+#     "pincode":302020
 
-}
+# }
 
 //update a form
 # POST http://localhost:8000/api/form/update HTTP/1.1
