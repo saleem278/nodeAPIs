@@ -14,7 +14,7 @@ import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import formRoutes from "./routes/formRoutes.js";
-import swaggerFile from "./docs/swagger_output.json" assert { type: "json" };
+// import swaggerFile from "./docs/swagger_output.json" assert { type: "json" };
 
 dotenv.config();
 
@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+// app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use(cors({ origin: "*" }));
 app.use(express.json());
