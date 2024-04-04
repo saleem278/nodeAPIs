@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import colors from "colors";
 import morgan from "morgan";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/db.js";
 
@@ -12,6 +14,7 @@ import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import formRoutes from "./routes/formRoutes.js";
+import swaggerFile from "./docs/swagger_output.json" assert { type: "json" };
 
 dotenv.config();
 
@@ -24,9 +27,13 @@ const payPalClientId =
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-app.use(cors());
+
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.get("/", (req, res) => {
+  // #swagger.tags = ['HealthCheck']
   res.json({ message: "API is running...." });
 });
 app.use("/api/products", productRoutes);
@@ -34,7 +41,10 @@ app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/form", formRoutes);
-app.get("/api/config/paypal", (req, res) => res.send(payPalClientId));
+app.get("/api/config/paypal", (req, res) => {
+  // #swagger.tags = ['Paypal']
+  res.send(payPalClientId);
+});
 
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));

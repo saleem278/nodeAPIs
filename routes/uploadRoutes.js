@@ -34,6 +34,8 @@ const upload = multer({
   },
 })
 
+
+// #swagger.tags = ['Uploads']
 router.post('/', upload.single('image'), (req, res) => {
   res.send(`/${req.file.path}`)
 })

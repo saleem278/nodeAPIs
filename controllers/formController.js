@@ -5,6 +5,7 @@ import Form from "../models/formModel.js";
 // @route   POST /api/form/create_form
 // @access  Public
 const createForm = asyncHandler(async (req, res) => {
+  // #swagger.tags = ['Forms']
   const {
     first_name,
     email,
@@ -41,6 +42,7 @@ const createForm = asyncHandler(async (req, res) => {
 // @route   GET /api/form/:id
 // @access  Public
 const getFormById = asyncHandler(async (req, res) => {
+  // #swagger.tags = ['Forms']
   const form = await Form.findById(req.params.id);
 
   if (form) {
@@ -54,13 +56,18 @@ const getFormById = asyncHandler(async (req, res) => {
 // @route   GET /api/form/all_forms
 // @access  Public
 const getAllForms = asyncHandler(async (req, res) => {
+  // #swagger.tags = ['Forms']
   const forms = await Form.find({});
   res
     .status(200)
     .json({ status: true, message: "Fetched All the forms", data: forms });
 });
 
+// @desc    Get Form By Id
+// @route   GET /api/form/:id
+// @access  Public
 const updateFormByID = asyncHandler(async (req, res) => {
+  // #swagger.tags = ['Forms']
   const form = await Form.findByIdAndUpdate(req.body.id, req.body, {
     new: true,
   });
@@ -81,6 +88,7 @@ const updateFormByID = asyncHandler(async (req, res) => {
 // @route   GET /api/form/:id
 // @access  Public
 const deleteAFormByID = asyncHandler(async (req, res) => {
+  // #swagger.tags = ['Forms']
   const form = await Form.findByIdAndDelete(req.params.id);
   if (form) {
     res.json({
@@ -99,6 +107,7 @@ const deleteAFormByID = asyncHandler(async (req, res) => {
 // @route   GET /api/form/admin_delete_all_forms
 // @access  Public
 const deleteAllFormsByAdmin = asyncHandler(async (req, res) => {
+  // #swagger.tags = ['Forms']
   if (req.query) {
     let ticket = req.query.ticket;
     if (ticket === "Techno") {
@@ -108,7 +117,9 @@ const deleteAllFormsByAdmin = asyncHandler(async (req, res) => {
           return res.status(400).json({ status: false, message: err.message });
         } else {
           console.log("Collection emptied successfully.");
-          return res.status(200).json({ status: true, message: "All forms Deleted" });
+          return res
+            .status(200)
+            .json({ status: true, message: "All forms Deleted" });
         }
       });
     } else {
